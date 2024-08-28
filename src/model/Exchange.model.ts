@@ -22,7 +22,7 @@ export interface Exchangetype extends mongoose.Document{
     },
     bookrequested:{
         type: mongoose.Schema.Types.ObjectId,
-        ref:'Books'
+        ref:'books'
     },  
     description:{
         type:String,
@@ -31,6 +31,6 @@ export interface Exchangetype extends mongoose.Document{
 
 
 const ExchangeModel = (mongoose.models.Exchange as mongoose.Model<Exchangetype>)
-                    || (mongoose.model("Exchange",ExchangeSchema))
+                    || (mongoose.model<Exchangetype>("Exchange",ExchangeSchema))
 
 export default ExchangeModel;

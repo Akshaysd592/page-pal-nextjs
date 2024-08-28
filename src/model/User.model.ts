@@ -32,13 +32,13 @@ export interface User extends mongoose.Document{
     bookList:[
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref:'Books'
+            ref:'books'
         }
     ],
     exchangeRequest:[
          {
             type:mongoose.Schema.Types.ObjectId,
-            ref:'Exchange'
+            ref:'exchanges'
          }
     ]
     

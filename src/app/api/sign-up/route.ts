@@ -17,7 +17,7 @@ export async function POST(request:Request){
             console.log(userExist,'-------------------');
 
             if(userExist){ // if user already exist 
-                return ApiResponse(200,"User already Exists");
+                return ApiResponse(false,404,"User already Exists");
             }
 
             // hashed password
@@ -32,13 +32,14 @@ export async function POST(request:Request){
                 exchangeRequest :[],
             })
             console.log("User stored successfully...")
-            return ApiResponse(200,"SignUp successfull..")
+            return ApiResponse(true,200,"SignUp successfull..")
 
 
 
         } catch (error:any) {
             console.log("Error in Signup api");
             return ApiResponse(
+                false,
                 200,
                 error.message
             )

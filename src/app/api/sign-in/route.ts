@@ -14,19 +14,19 @@ export async function POST(request:Request){
     // check if user not exist, if not exist then message for sign-up
     const userExist = await UserModel.findOne({email});
     if(!userExist){
-        return ApiResponse(404,"You are not registered yet,Please Signup first..")
+        return ApiResponse(true,404,"You are not registered yet,Please Signup first..")
     }
 
     // if user already exist then compare password
     const passwordmatch = await bcrypt.compare(password,userExist.password);
 
-    if(passwordmatch) return ApiResponse(200,"User sign-in successfully...")
+    if(passwordmatch) return ApiResponse(true,200,"User sign-in successfully...")
     
 
 
   } catch (error:any) {
      console.log("Error occured while sign-in")
-    return  ApiResponse(500,`Error occured while sign-in ${error.message}`)
+    return  ApiResponse(false,500,`Error occured while sign-in ${error.message}`)
     
   }
 
