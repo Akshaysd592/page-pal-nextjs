@@ -2,6 +2,7 @@ import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User.model";
 import { ApiResponse } from "@/type/ApiResponse";
 import bcrypt from 'bcryptjs'
+import * as jwt from 'jsonwebtoken'
 
 export async function POST(request:Request){
   // database connection 
@@ -10,7 +11,7 @@ export async function POST(request:Request){
   try {
 
     const {email,password} = await request.json();
-    console.log("here we are 1",email,password)
+    // console.log("here we are 1",email,password)
     
     // check if user not exist, if not exist then message for sign-up
     const userExist = await UserModel.findOne({email});
@@ -20,6 +21,24 @@ export async function POST(request:Request){
 
     // if user already exist then compare password
     const passwordmatch = await bcrypt.compare(password,userExist.password);
+
+    if(!passwordmatch){
+      return ApiResponse(false,400,"password not matched")
+    }
+     
+
+    let payload = {
+      user:{
+        userId : userExist._id,
+        email: userExist.email
+      }
+    }
+    
+     await jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: 60 * 60 });
+    
+    
+
+
      return ApiResponse(true,200,"User sign-in successfully...",userExist)
     
 

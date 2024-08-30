@@ -22,7 +22,11 @@ function SignInPage() {
     const router = useRouter();
     
      const [submitting , setSubmitting] = useState(false);
-     const [localvalue, setLocalValue] = useState(false);
+     // for render and data storage
+     const [localvalue, setLocalValue] = useState({
+      userId:"",
+      email:"",
+     });
      const [render,setRender] = useState(false);
    
       const form = useForm<z.infer<typeof signInValidate>>({ 
@@ -33,13 +37,21 @@ function SignInPage() {
         }
      })
  
-    
+     useEffect(()=>{
+        //  console.log(localvalue);
+        //  toast({
+        //   title: JSON.stringify(localvalue.userId)
+        //  })
 
+           localStorage.setItem('userId',JSON.stringify(localvalue.userId))
+           localStorage.setItem('email',JSON.stringify(localvalue.email))
+     },[localvalue])
+    
+      
 
      function setData(signIndata:any){
-      localStorage.setItem('email',(signIndata.data?.data?.email)); 
-      localStorage.setItem('userId',(signIndata.data?.data._id));
-
+      localStorage.setItem('email',JSON.stringify(signIndata.data?.data?.email)); 
+      localStorage.setItem('userId',JSON.stringify(signIndata.data?.data._id));
     }
 
     useEffect(()=>{
@@ -55,11 +67,11 @@ async function onSubmit(values: z.infer<typeof signInValidate>){
         try {
              const signIndata = await axios.post('/api/sign-in',values)
             //  console.log(signIndata);
-             setLocalValue(true);
-            if(localvalue && render){ // if window rendered and apivalue returned then store it to localstorage
-              setData(signIndata);
-            }
-
+            console.log(signIndata,"....")
+             setLocalValue({userId:signIndata.data.data._id,
+               email:signIndata.data.data.email
+             });
+              
              toast({
                 title:"SignIn successfully",
                 description: `Welcome to home page`,

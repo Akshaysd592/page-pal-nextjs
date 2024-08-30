@@ -23,14 +23,13 @@ import Signout from "./Signout";
 
 
 export function NavigationBar() {
-      const [userLogin,setUserLogin] = useState(false);
+      const [userLogin,setUserLogin] = useState("");
       const [signoutModal,setSignOutModal] = useState(false);
       
       useEffect(()=>{
-        let user =  JSON.stringify(localStorage.getItem('userId'))? JSON.stringify(localStorage.getItem('userId')):null;
-        if(user){
-          setUserLogin(true);
-        }
+           if(localStorage.getItem("userId") !== null){
+               setUserLogin(localStorage.getItem("userId")||"");
+           }
       })
 
       
@@ -44,9 +43,12 @@ export function NavigationBar() {
         <div className="gap-3 m-4 flex justify-center items-center  sm:font-extrabold text-xl sm:text-2xl"><p>PagePal</p></div>
       <NavigationMenu>
       {
-        userLogin?<> <NavigationMenuList>
+        userLogin.length >0 ?<> <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
+          <Link href={'/all-books'}>
+          <NavigationMenuTrigger>Explore Books</NavigationMenuTrigger>
+          </Link>
+        
           {/* <NavigationMenuContent>
             <ul className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
               <li className="row-span-3">
@@ -107,7 +109,7 @@ export function NavigationBar() {
     </NavigationMenu>
    
      {
-        userLogin?<div className="gap-3 m-4 "><Signout btnName={"SignOut"} /></div>:<div className="gap-3 m-4"><Link href={'/sign-in'}><Button className="m-1" >SignIn</Button></Link> <Link href={'/sign-up'}><Button>SignUp</Button></Link> </div>
+        userLogin.length>0 ?<Signout btnName={"SignOut"} />:<div className="gap-3 m-4"><Link href={'/sign-in'}><Button className="m-1" >SignIn</Button></Link> <Link href={'/sign-up'}><Button>SignUp</Button></Link> </div>
      }
       
      
