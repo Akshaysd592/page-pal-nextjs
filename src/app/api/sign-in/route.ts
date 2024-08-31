@@ -22,9 +22,9 @@ export async function POST(request:Request){
     // if user already exist then compare password
     const passwordmatch = await bcrypt.compare(password,userExist.password);
 
-    if(!passwordmatch){
-      return ApiResponse(false,400,"password not matched")
-    }
+    // if(!passwordmatch){
+    //   return ApiResponse(false,400,"password not matched")
+    // }
      
 
     let payload = {
@@ -34,8 +34,8 @@ export async function POST(request:Request){
       }
     }
     
-     await jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: 60 * 60 });
-    
+    //  await jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: 60 * 60 });
+    jwt.sign(payload,process.env.JwT_SECRET!,{expiresIn:60*60})
     
 
 

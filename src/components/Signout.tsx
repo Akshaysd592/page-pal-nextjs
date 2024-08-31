@@ -29,7 +29,7 @@ function Signout({btnName}: { btnName: string }) {
   return (
     <Dialog>
           <DialogTrigger asChild>
-            <Button variant="outline">{btnName}</Button>
+            <Button className='p-6 m-4' variant="outline">{btnName}</Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>

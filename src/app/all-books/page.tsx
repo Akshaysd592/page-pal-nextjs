@@ -1,50 +1,53 @@
+"use client";
+
 import React, { useEffect, useReducer, useState } from 'react'
 import axios from 'axios';
 import { useToast } from '@/components/ui/use-toast';
-type Book={
-      title:string;
-      genre:string;
-      author:string;
-}
-export async function AllBooksPage() {
+import { Booktype } from '@/model/Books.model';
+export function AllBooksPage() {
   const {toast} = useToast();
-  const [books,setBooks] = useState<Book[]>([])
-  let userId = "";
+  
+  const [books,setBooks] = useState<Booktype[]>([]);
+  const [loading , setLoading] = useState(false)
+  
   useEffect(()=>{
-    if(localStorage.getItem("userId")){
-       userId = localStorage.getItem("userId") ?? "";
-    }
-    getData();
-   
-  })
+         getBooksData();
 
-  const getData = async()=>{
+  },[])
+
+  const getBooksData = async()=>{
+    setLoading(true)
     try {
-      const allBooks = await axios.put<{ data: Book[] }>('/get-all-books', JSON.parse(userId));
-      setBooks(allBooks.data.data);
-    
+      let getbooks = await axios.put('/api/get-all-books');
+      // console.log(getbooks.data.findbooks);
+      setBooks(getbooks.data.data);
+      toast({
+        title:'Books fetched successfully'
+      })
+      
     } catch (error:any) {
-         console.log(error.message);
-         toast({
-          title:"Can not get Books details, Try Again later"
-         })
+      console.log(error);
+      toast({
+        title:"Error occured while getting books data "
+      })
     }
+    setLoading(false)
   }
-
-
-   
-    
-
-
 
   return (
     <div>
+
+      
        {
-         books.map((book,i)=>(
-          <div key={i}>
-          {book?.title}
-          </div>
-        ))
+        loading?
+        (<div>Loading...</div>):
+        books.length>0 ? (<div>
+          {
+            books.map((book,i)=>(
+              <div key={i}>{book.title}</div>
+            ))
+          }
+        </div>) : (<div>No books available</div>)
        }
     </div>
   )

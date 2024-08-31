@@ -19,12 +19,14 @@ import { Button } from "./ui/button"
 import {components} from '@/lib/constantvalue'
 import { useRouter } from "next/navigation"
 import Signout from "./Signout";
+import axios from "axios";
 
 
 
 export function NavigationBar() {
       const [userLogin,setUserLogin] = useState("");
-      const [signoutModal,setSignOutModal] = useState(false);
+      // const [token, setToken] = useState( axios.defaults.headers.head.Authorization)
+      // console.log(token)
       
       useEffect(()=>{
            if(localStorage.getItem("userId") !== null){
